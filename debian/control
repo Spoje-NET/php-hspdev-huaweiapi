@@ -1,5 +1,5 @@
 Source: php-hspdev-huaweiapi
-Build-Depends: debhelper (>= 7.0.50~), phpdocumentor
+Build-Depends: debhelper (>= 7.0.50~), phpdocumentor, php-curl
 Section: web
 Standards-Version: 4.5.1
 Maintainer: Vítězslav Dvořák <info@vitexsoftware.cz>
