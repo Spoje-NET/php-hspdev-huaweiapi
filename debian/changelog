@@ -1,0 +1,5 @@
+php-hspdev-huaweiapi (0.0.1) unstable; urgency=medium
+
+  * new support for Pricelist command 
+
+ -- Vítězslav Dvořák <vitex@develoid.jinonice.czf>  Wed, 29 May 2019 16:21:24 +0200

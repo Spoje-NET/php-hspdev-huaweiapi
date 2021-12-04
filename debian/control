@@ -1,0 +1,24 @@
+Source: php-hspdev-huaweiapi
+Build-Depends: debhelper (>= 7.0.50~)
+Section: web
+Standards-Version: 4.5.1
+Maintainer: Vítězslav Dvořák <info@vitexsoftware.cz>
+Uploaders: Vitex <vitex@hippy.cz>
+Priority: optional
+Homepage: https://github.com/Spoje-NET/php-hspdev-huaweiapi
+
+Package: php-hspdev-huaweiapi
+Depends: ${misc:Depends}, php-curl
+Architecture: all
+Section: web
+Priority: optional
+Description: PHP Client Library for Huawei E5180 API
+ Let's you interface with some of the functions on the Huawei E5180 Cube, through it's existing API. 
+
+Package: php-hspdev-huaweiapi-doc
+Depends: ${misc:Depends},
+Architecture: all
+Section: web
+Priority: optional
+Description: PHP Client Library for Huawei E5180 API documentation
+ Let's you interface with some of the functions on the Huawei E5180 Cube, through it's existing API. 

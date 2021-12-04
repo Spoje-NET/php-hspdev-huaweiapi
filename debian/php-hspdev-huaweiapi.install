@@ -1,0 +1,2 @@
+src/*                       usr/share/php/HuaweiApi
+debian/composer.json	    usr/share/php/HuaweiApi

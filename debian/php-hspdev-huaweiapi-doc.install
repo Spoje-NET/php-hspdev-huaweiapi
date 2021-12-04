@@ -1,0 +1,5 @@
+docs/*				usr/share/doc/php-hspdev-huaweiapi/html
+#docs/resources/*		usr/share/doc/php-hspdev-huaweiapi/html/resources
+debian/php-hspdev-huaweiapi-doc.conf	usr/share/doc/php-hspdev-huaweiapi/apache
+README.md			usr/share/doc/php-hspdev-huaweiapi
+

@@ -1,0 +1,6 @@
+php-hspdev-huaweiapi/
+php-hspdev-huaweiapi-doc/
+debian/debhelper-build-stamp
+php-hspdev-huaweiapi.substvars
+php-hspdev-huaweiapi.debhelper.log
+
