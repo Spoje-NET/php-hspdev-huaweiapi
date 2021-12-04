@@ -8,7 +8,7 @@ Priority: optional
 Homepage: https://github.com/Spoje-NET/php-hspdev-huaweiapi
 
 Package: php-hspdev-huaweiapi
-Depends: ${misc:Depends}, php-curl, composer-global-update
+Depends: ${misc:Depends}, php-curl, composer-debian
 Architecture: all
 Section: web
 Priority: optional
