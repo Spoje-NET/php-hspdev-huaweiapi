@@ -233,6 +233,22 @@ class Router
         return $obj;
     }
 
+       /**
+	* Mark an SMS read by ID
+        * 
+        * @param int $inde ID of SMS to mark as Read
+        * 
+	* @return boolean
+        */
+	public function markSmsAsRead($index)
+	{
+		$this->prepare();
+	        $readXml = '<?xml version:"1.0" encoding="UTF-8"?><request><Index>'.$index.'</Index></request>';
+	        $xml = $this->http->postXml($this->getUrl('api/sms/set-read'), $readXml);
+	        $obj = new \SimpleXMLElement($xml);
+		return ((string)$obj == 'OK');
+	}    
+    
     /**
      * Deletes an SMS by ID, also called "Index".
      * The index on the Message object you get from getInbox

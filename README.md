@@ -13,6 +13,7 @@ and I've seen it overload multiple times when you have lots of clients on your (
  - Send SMS through the mobile network
  - Receive SMS (you need to pool for this periodically)
  - Delete SMS (to avoid filling it up)
+ - Mark  SMS as read
  - Query router status (lots of info)
  - Query traffic statistics (decent amount of info)
  - Get the current PLMN (which network you are on)
@@ -148,6 +149,7 @@ Have a look inside the Router.php class to find out what methods you can use, it
  - getLedStatus() true/false for LED status.
  - isLoggedIn() true/false to check if logged in.
  - getInbox($page = 1, $count = 20, $unreadPreferred = false) defaults are fine for most tinkering. page/count for pagination.
+ - markSMSAsREad($index)  mark SMS as read.
  - deleteSms($index) provide with SMS index for deleting. Returns true if not found also.
  - sendSms($receiver, $message) Pretty self explanatory. Might return true and not send anyway. There is an API to query for send status, but I didn't worry about it.
 

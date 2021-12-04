@@ -37,3 +37,6 @@ Temporary Items
 .apdisk
 
 /nbproject/private/
+/composer.lock
+/.phpdoc/
+/docs/

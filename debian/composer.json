@@ -1,5 +1,5 @@
 {
-  "name": "deb/subreg",
+  "name": "deb/huaweiapi",
   "description": "PHP Based Library for easy interaction with Huawei E5180",
   "license": "GPL-2.0",
   "authors": [
