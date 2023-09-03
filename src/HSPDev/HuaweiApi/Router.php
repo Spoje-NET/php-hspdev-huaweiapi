@@ -2,6 +2,8 @@
 
 namespace HSPDev\HuaweiApi;
 
+use \SimpleXMLElement;
+
 /*
 * Depends on:
 * HSPDev\HuaweiApi\CustomHttpClient
@@ -236,7 +238,7 @@ class Router
        /**
 	* Mark an SMS read by ID
         * 
-        * @param int $inde ID of SMS to mark as Read
+        * @param int $index ID of SMS to mark as Read
         * 
 	* @return boolean
         */

@@ -40,3 +40,6 @@ Temporary Items
 /composer.lock
 /.phpdoc/
 /docs/
+/debian/debhelper-build-stamp
+/debian/php-hspdev-huaweiapi-doc.debhelper.log
+/debian/php-hspdev-huaweiapi-doc.substvars

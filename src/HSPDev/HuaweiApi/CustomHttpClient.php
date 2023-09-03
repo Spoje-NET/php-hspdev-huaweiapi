@@ -143,4 +143,18 @@ class CustomHttpClient
 
         return $result;
     }
+    
+    /**
+     * Destructor to make phpstan happy
+     */
+    public function __destruct()
+    {
+        if($this->requestTokenOne){
+            unset($this->requestTokenOne);
+        }
+        if($this->requestTokenTwo){
+            unset($this->requestTokenTwo);
+        }
+    }
+    
 }
