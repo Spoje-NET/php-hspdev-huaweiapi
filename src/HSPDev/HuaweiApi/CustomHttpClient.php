@@ -55,8 +55,8 @@ class CustomHttpClient
             'Keep-Alive: 115',
             'Connection: keep-alive',
             //The router expects these two to be there, but empty, when not in use.
-            'Cookie: '.$this->manualCookieData,
-            '__RequestVerificationToken: '.$this->requestToken,
+            'Cookie: ' . $this->manualCookieData,
+            '__RequestVerificationToken: ' . $this->requestToken,
         ];
         foreach ($headerFields as $h) {
             $header[] = $h;
@@ -143,18 +143,17 @@ class CustomHttpClient
 
         return $result;
     }
-    
+
     /**
      * Destructor to make phpstan happy
      */
     public function __destruct()
     {
-        if($this->requestTokenOne){
+        if ($this->requestTokenOne) {
             unset($this->requestTokenOne);
         }
-        if($this->requestTokenTwo){
+        if ($this->requestTokenTwo) {
             unset($this->requestTokenTwo);
         }
     }
-    
 }
