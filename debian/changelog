@@ -1,3 +1,9 @@
+php-hspdev-huaweiapi (0.0.2) UNRELEASED; urgency=medium
+
+  * Sms Reading function phpdoc update
+
+ --  <vitezslav.dvorak@spojenet.cz>  Tue, 26 Mar 2024 18:05:50 +0100
+
 php-hspdev-huaweiapi (0.0.1) unstable; urgency=medium
 
   * new support for Pricelist command 

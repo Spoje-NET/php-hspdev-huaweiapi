@@ -446,13 +446,13 @@ class Router
     /**
      * Gets the SMS status
      *
-     * @param int $page            page number during pagination
-     * @param int $pageSize        maximum number of items per page
-     * @param int $boxType         1 = inbox, 2 = outbox
-     * @param int $unreadPreffered if True, unread SMS'es are listed first, otherwise
-     *                             they are listed by date in descending order
+     * @param int  $page            page number during pagination
+     * @param int  $pageSize        maximum number of items per page
+     * @param int  $boxType         1 = inbox, 2 = outbox
+     * @param bool $unreadPreffered if True, unread SMS'es are listed first, otherwise
+     *                              they are listed by date in descending order
      *
-     * @return array<Sms>
+     * @return \SimpleXMLElement
      */
     public function getSms($page = 1, $pageSize = 100, $boxType = 1, $unreadPreffered = true)
     {
