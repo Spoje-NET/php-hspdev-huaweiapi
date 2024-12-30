@@ -1,8 +1,22 @@
 <?php
 
-namespace HSPDev\HuaweiApi;
+declare(strict_types=1);
 
-use SimpleXMLElement;
+/**
+ * This file is part of the HuaweiApi package
+ *
+ * https://github.com/Spoje-NET/php-hspdev-huaweiapi/
+ *
+ * forked from https://github.com/HSPDev/Huawei-E5180-API
+ *
+ * (C) 2015-2019 Henrik Sylvester Oddergaard  <tech@testaviva.dk>
+ * (G) 2021-2024 Vítězslav Dvořák <vitezslav.dvorak@spojenet.cz>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace HSPDev\HuaweiApi;
 
 /*
  * Depends on:
@@ -17,7 +31,7 @@ use SimpleXMLElement;
 class Router
 {
     /**
-     * @link https://forum.mikrotik.com/viewtopic.php?t=166859#p1018120
+     * @see https://forum.mikrotik.com/viewtopic.php?t=166859#p1018120
      * Error codes.
      */
     public static $errors = [
@@ -151,9 +165,10 @@ class Router
         '118005' => 'ERROR_CRADLE_CODING_FAILED',
         '118006' => 'ERROR_CRADLE_UPDATE_PROFILE_FAILED',
     ];
-    protected $http = null; //Our custom HTTP provider.
-    public $routerAddress = 'http://192.168.8.1'; //This is the one for the router I got.
-    //These two we need to acquire through an API call.
+    public $routerAddress = 'http://192.168.8.1'; // This is the one for the router I got.
+    protected $http; // Our custom HTTP provider.
+
+    // These two we need to acquire through an API call.
     protected $sessionInfo = '';
     protected $tokenInfo = '';
 
@@ -164,15 +179,17 @@ class Router
 
     /**
      * Sets the router address.
+     *
+     * @param mixed $address
      */
-    public function setAddress($address)
+    public function setAddress($address): void
     {
-        //Remove trailing slash if any.
+        // Remove trailing slash if any.
         $address = rtrim($address, '/');
 
-        //If not it starts with http, we assume HTTP and add it.
+        // If not it starts with http, we assume HTTP and add it.
         if (strpos($address, 'http') !== 0) {
-            $address = 'http://' . $address;
+            $address = 'http://'.$address;
         }
 
         $this->routerAddress = $address;
@@ -182,19 +199,21 @@ class Router
      * Most API responses are just simple XML, so to avoid repetition
      * this function will GET the route and return the object.
      *
-     * @return SimpleXMLElement
+     * @param mixed $route
+     *
+     * @return \SimpleXMLElement
      */
     public function generalizedGet($route)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
         $xml = $this->http->get($this->getUrl($route));
         $obj = new \SimpleXMLElement($xml);
 
-        //Check for error message
+        // Check for error message
         if (property_exists($obj, 'code')) {
-            throw new \UnexpectedValueException('The API returned error code: ' . $obj->code);
+            throw new \UnexpectedValueException('The API returned error code: '.$obj->code);
         }
 
         return $obj;
@@ -203,7 +222,7 @@ class Router
     /**
      * Gets the current router status.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getStatus()
     {
@@ -213,7 +232,7 @@ class Router
     /**
      * Gets traffic statistics (numbers are in bytes).
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getTrafficStats()
     {
@@ -224,7 +243,7 @@ class Router
      * Gets monthly statistics (numbers are in bytes)
      * This probably only works if you have setup a limit.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getMonthStats()
     {
@@ -234,7 +253,7 @@ class Router
     /**
      * Info about the current mobile network. (PLMN info).
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getNetwork()
     {
@@ -244,7 +263,7 @@ class Router
     /**
      * Gets the current craddle status.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getCraddleStatus()
     {
@@ -254,7 +273,7 @@ class Router
     /**
      * Get current SMS count.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getSmsCount()
     {
@@ -264,7 +283,7 @@ class Router
     /**
      * Get current WLAN Clients.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getWlanClients()
     {
@@ -274,7 +293,7 @@ class Router
     /**
      * Get notifications on router.
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     public function getNotifications()
     {
@@ -287,18 +306,21 @@ class Router
      * I don't know if there is an upper limit on $count. Your milage may vary.
      * unreadPrefered should give you unread messages first.
      *
+     * @param mixed $on
+     *
      * @return bool
      */
     public function setLedOn($on = false)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
-        $ledXml = '<?xml version:"1.0" encoding="UTF-8"?><request><ledSwitch>' . ($on ? '1' : '0') . '</ledSwitch></request>';
+        $ledXml = '<?xml version:"1.0" encoding="UTF-8"?><request><ledSwitch>'.($on ? '1' : '0').'</ledSwitch></request>';
         $xml = $this->http->postXml($this->getUrl('api/led/circle-switch'), $ledXml);
         $obj = new \SimpleXMLElement($xml);
-        //Simple check if login is OK.
-        return (string) $obj == 'OK';
+
+        // Simple check if login is OK.
+        return (string) $obj === 'OK';
     }
 
     /**
@@ -309,8 +331,9 @@ class Router
     public function getLedStatus()
     {
         $obj = $this->generalizedGet('api/led/circle-switch');
+
         if (property_exists($obj, 'ledSwitch')) {
-            if ($obj->ledSwitch == '1') {
+            if ($obj->ledSwitch === '1') {
                 return true;
             }
         }
@@ -326,13 +349,14 @@ class Router
     public function isLoggedIn()
     {
         $obj = $this->generalizedGet('api/user/state-login');
+
         if (property_exists($obj, 'State')) {
             /*
              * Logged out seems to be -1
              * Logged in seems to be 0.
              * What the hell?
              */
-            if ($obj->State == '0') {
+            if ($obj->State === '0') {
                 return true;
             }
         }
@@ -346,42 +370,54 @@ class Router
      * I don't know if there is an upper limit on $count. Your milage may vary.
      * unreadPrefered should give you unread messages first.
      *
-     * @return SimpleXMLElement
+     * @param mixed $page
+     * @param mixed $count
+     * @param mixed $unreadPreferred
+     *
+     * @return \SimpleXMLElement
      */
     public function getInbox($page = 1, $count = 20, $unreadPreferred = false)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
-        $inboxXml = '<?xml version="1.0" encoding="UTF-8"?><request>
-			<PageIndex>' . $page . '</PageIndex>
-			<ReadCount>' . $count . '</ReadCount>
+        $inboxXml = <<<'EOD'
+<?xml version="1.0" encoding="UTF-8"?><request>
+			<PageIndex>
+EOD.$page.<<<'EOD'
+</PageIndex>
+			<ReadCount>
+EOD.$count.<<<'EOD'
+</ReadCount>
 			<BoxType>1</BoxType>
 			<SortType>0</SortType>
 			<Ascending>0</Ascending>
-			<UnreadPreferred>' . ($unreadPreferred ? '1' : '0') . '</UnreadPreferred>
+			<UnreadPreferred>
+EOD.($unreadPreferred ? '1' : '0').<<<'EOD'
+</UnreadPreferred>
 			</request>
-		';
-        $xml = $this->http->postXml($this->getUrl('api/sms/sms-list'), $inboxXml);
-        $obj = new \SimpleXMLElement($xml);
 
-        return $obj;
+EOD;
+        $xml = $this->http->postXml($this->getUrl('api/sms/sms-list'), $inboxXml);
+
+        return new \SimpleXMLElement($xml);
     }
 
     /**
-     * Mark an SMS read by ID
+     * Mark an SMS read by ID.
      *
      * @param int $index ID of SMS to mark as Read
      *
-     * @return boolean
+     * @return bool
      */
     public function markSmsAsRead($index)
     {
         $this->prepare();
-        $readXml = '<?xml version:"1.0" encoding="UTF-8"?><request><Index>' . $index . '</Index></request>';
+        $readXml = '<?xml version:"1.0" encoding="UTF-8"?><request><Index>'.$index.'</Index></request>';
         $xml = $this->http->postXml($this->getUrl('api/sms/set-read'), $readXml);
         $obj = new \SimpleXMLElement($xml);
-        return ((string) $obj == 'OK');
+
+        return (string) $obj === 'OK';
     }
 
     /**
@@ -390,21 +426,28 @@ class Router
      * will contain an "Index" property with a value like "40000" and up.
      * Note: Will return true if the Index DOES NOT exist already.
      *
+     * @param mixed $index
+     *
      * @return bool
      */
     public function deleteSms($index)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
-        $deleteXml = '<?xml version="1.0" encoding="UTF-8"?><request>
-			<Index>' . $index . '</Index>
+        $deleteXml = <<<'EOD'
+<?xml version="1.0" encoding="UTF-8"?><request>
+			<Index>
+EOD.$index.<<<'EOD'
+</Index>
 			</request>
-		';
+
+EOD;
         $xml = $this->http->postXml($this->getUrl('api/sms/delete-sms'), $deleteXml);
         $obj = new \SimpleXMLElement($xml);
-        //Simple check if login is OK.
-        return (string) $obj == 'OK';
+
+        // Simple check if login is OK.
+        return (string) $obj === 'OK';
     }
 
     /**
@@ -413,38 +456,52 @@ class Router
      * call it and it should work, here in Denmark "42952777" etc (mine).
      * Message parameter got the normal SMS restrictions you know and love.
      *
+     * @param mixed $receiver
+     * @param mixed $message
+     *
      * @return bool
      */
     public function sendSms($receiver, $message)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
         /*
          * Note how it wants the length of the content also.
          * It ALSO wants the current date/time wtf? Oh well..
          */
-        $sendSmsXml = '<?xml version="1.0" encoding="UTF-8"?><request>
+        $sendSmsXml = <<<'EOD'
+<?xml version="1.0" encoding="UTF-8"?><request>
 			<Index>-1</Index>
 			<Phones>
-				<Phone>' . $receiver . '</Phone>
+				<Phone>
+EOD.$receiver.<<<'EOD'
+</Phone>
 			</Phones>
 			<Sca/>
-			<Content>' . $message . '</Content>
-			<Length>' . strlen($message) . '</Length>
+			<Content>
+EOD.$message.<<<'EOD'
+</Content>
+			<Length>
+EOD.\strlen($message).<<<'EOD'
+</Length>
 			<Reserved>1</Reserved>
-			<Date>' . date('Y-m-d H:i:s') . '</Date>
+			<Date>
+EOD.date('Y-m-d H:i:s').<<<'EOD'
+</Date>
 			<SendType>0</SendType>
 			</request>
-		';
+
+EOD;
         $xml = $this->http->postXml($this->getUrl('api/sms/send-sms'), $sendSmsXml);
         $obj = new \SimpleXMLElement($xml);
-        //Simple check if login is OK.
-        return (string) $obj == 'OK';
+
+        // Simple check if login is OK.
+        return (string) $obj === 'OK';
     }
 
     /**
-     * Gets the SMS status
+     * Gets the SMS status.
      *
      * @param int  $page            page number during pagination
      * @param int  $pageSize        maximum number of items per page
@@ -456,17 +513,19 @@ class Router
      */
     public function getSms($page = 1, $pageSize = 100, $boxType = 1, $unreadPreffered = true)
     {
-
-        $smsRequestXml = sprintf('<request>
+        $smsRequestXml = sprintf(<<<'EOD'
+<request>
             <PageIndex>%d</PageIndex>
             <ReadCount>%d</ReadCount>
             <BoxType>%d</BoxType>
             <SortType>0</SortType>
             <Ascending>0</Ascending>
             <UnreadPreferred>%d</UnreadPreferred>
-        </request>', $page, $pageSize, $boxType, $unreadPreffered ? 1 : 0);
+        </request>
+EOD, $page, $pageSize, $boxType, $unreadPreffered ? 1 : 0);
 
         $xml = $this->http->postXml($this->getUrl('api/sms/sms-list'), $smsRequestXml);
+
         return new \SimpleXMLElement($xml);
     }
 
@@ -476,11 +535,14 @@ class Router
      * at timing your session out.
      * Call something periodically or just relogin on error.
      *
+     * @param mixed $username
+     * @param mixed $password
+     *
      * @return bool
      */
     public function login($username, $password)
     {
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
         /*
@@ -496,69 +558,83 @@ class Router
          * changes everytime depending on the current user session/token.
          * Not bad actually.
          */
-        $loginXml = '<?xml version="1.0" encoding="UTF-8"?><request>
-		<Username>' . $username . '</Username>
+        $loginXml = <<<'EOD'
+<?xml version="1.0" encoding="UTF-8"?><request>
+		<Username>
+EOD.$username.<<<'EOD'
+</Username>
 		<password_type>4</password_type>
-		<Password>' . base64_encode(hash('sha256', $username . base64_encode(hash('sha256', $password, false)) . $this->http->getToken(), false)) . '</Password>
+		<Password>
+EOD.base64_encode(hash('sha256', $username.base64_encode(hash('sha256', $password, false)).$this->http->getToken(), false)).<<<'EOD'
+</Password>
 		</request>
-		';
+
+EOD;
         $xml = $this->http->postXml($this->getUrl('api/user/login'), $loginXml);
         $obj = new \SimpleXMLElement($xml);
-        //Simple check if login is OK.
-        return (string) $obj == 'OK';
+
+        // Simple check if login is OK.
+        return (string) $obj === 'OK';
     }
 
     /**
      * Sets the data switch to enable or disable the mobile connection.
      *
+     * @param mixed $value
+     *
      * @return bool
      */
     public function setDataSwitch($value)
     {
-        if (is_int($value) === false) {
+        if (\is_int($value) === false) {
             throw new \Exception('Parameter can only be integer.');
         }
+
         if ($value !== 0 && $value !== 1) {
             throw new \Exception('Parameter can only be integer.');
         }
 
-        //Makes sure we are ready for the next request.
+        // Makes sure we are ready for the next request.
         $this->prepare();
 
-        $dataSwitchXml = '<?xml version="1.0" encoding="UTF-8"?><request><dataswitch>' . $value . '</dataswitch></request>';
+        $dataSwitchXml = '<?xml version="1.0" encoding="UTF-8"?><request><dataswitch>'.$value.'</dataswitch></request>';
 
         $xml = $this->http->postXml($this->getUrl('api/dialup/mobile-dataswitch'), $dataSwitchXml);
         $obj = new \SimpleXMLElement($xml);
 
-        //Simple check if login is OK.
-        return (string) $obj == 'OK';
+        // Simple check if login is OK.
+        return (string) $obj === 'OK';
     }
 
     /**
      * Internal helper that lets us build the complete URL
      * to a given route in the API.
      *
+     * @param mixed $route
+     *
      * @return string
      */
     protected function getUrl($route)
     {
-        return $this->routerAddress . '/' . $route;
+        return $this->routerAddress.'/'.$route;
     }
 
     /**
      * Makes sure that we are ready for API usage.
      */
-    protected function prepare()
+    protected function prepare(): void
     {
-        //Check to see if we have session / token.
-        if (strlen($this->sessionInfo) == 0 || strlen($this->tokenInfo) == 0) {
-            //We don't have any. Grab some.
+        // Check to see if we have session / token.
+        if ($this->sessionInfo === '' || $this->tokenInfo === '') {
+            // We don't have any. Grab some.
             $xml = $this->http->get($this->getUrl('api/webserver/SesTokInfo'));
             $obj = new \SimpleXMLElement($xml);
+
             if (!property_exists($obj, 'SesInfo') || !property_exists($obj, 'TokInfo')) {
                 throw new \RuntimeException('Malformed XML returned. Missing SesInfo or TokInfo nodes.');
             }
-            //Set it for future use.
+
+            // Set it for future use.
             $this->http->setSecurity($obj->SesInfo, $obj->TokInfo);
         }
     }
