@@ -1,2 +1,4 @@
 src/*                       usr/share/php/HuaweiApi
 debian/composer.json	    usr/share/php/HuaweiApi
+php-hspdev-huaweiapi.svg	usr/share/icons/hicolor/scalable/apps/
+io.github.spoje_net.php_hspdev_huaweiapi.metainfo.xml	usr/share/metainfo/
