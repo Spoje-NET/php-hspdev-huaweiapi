@@ -1,4 +1,6 @@
 # Huawei E5180 API
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Packaging: deb](https://img.shields.io/badge/packaging-.deb-red?logo=debian&logoColor=white)
 
 This project will let you interface with your Huawei E5180 Cube router easily.  
 This router is deployed by 3 DK, as "home routers" for their 4G connections. 
