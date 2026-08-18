@@ -9,7 +9,8 @@ String[] distributions = [
     //                 // The full Debian package ecosystem is not yet available for Forky.
     //                 // Re-enable once the stack builds cleanly for Forky.
     'ubuntu:jammy',
-    'ubuntu:noble'
+    'ubuntu:noble',
+    'ubuntu:resolute'
 ]
 
 String vendor = 'vitexsoftware'
